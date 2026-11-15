@@ -1,34 +1,32 @@
+
 plugins {
     id 'java'
-    id("org.jetbrains.intellij") version "1.17.4"
+    id 'org.jetbrains.intellij.platform' version '2.20.1'
 }
 
-group 'io.zhile.research.intellij'
-version '2.4_fix_2025'
+group = 'io.zhile.research.intellij'
+version = '11.15.26-fix'
 
-sourceCompatibility = 17
-targetCompatibility = 17
-
-repositories {
-    mavenCentral()
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
+
 
 dependencies {
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation 'junit:junit:4.13.2'
+
+    intellijPlatform {
+        intellijIdeaUltimate '2023.3'
+    }
 }
 
-buildPlugin {
-    buildSearchableOptions.enabled = false
-}
+intellijPlatform {
+    buildSearchableOptions = false
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    version = "2020.2.4"
-    type = "IU"
-}
-
-patchPluginXml {
-    changeNotes = """<pre>
+    pluginConfiguration {
+        changeNotes = """<pre>
 Release v2.1.14
   1. fix minor exceptions
 Release v2.1.13
@@ -79,8 +77,11 @@ Release v1.0.3
   1. bug fix
 Release v1.0.2
   1. compatibility fix
-</pre>"""
+</pre>""".stripIndent()
 
-    sinceBuild = "145.258"
-    untilBuild = "999.*"  // optional, can be removed
+        ideaVersion {
+            sinceBuild = '233'
+            untilBuild = provider { null }
+        }
+    }
 }
